@@ -1,34 +1,295 @@
-<!doctype html>
-<html lang="zh-Hant">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>個人介紹 — 名字</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <main class="card">
-      <div class="header">
-        <img src="assets/profile.svg" alt="大頭貼" class="avatar" width="160" height="160">
-        <h1>你好，我是 張三（Your Name）</h1>
+<!doctype html> <html lang="zh-Hant"> <head> <meta charset="utf-8" /> <meta name="viewport" content="width=device-width, initial-scale=1" /> <title>個人介紹 — ChuYK | 前端工程師 / JavaScript 開發</title> <meta name="description" content="張三（Your Name）— 前端工程師與 JavaScript 開發者。這個頁面包含以原生 JavaScript 寫成的互動示範與工具，作為技術作品展示。"> <link rel="stylesheet" href="styles.css"> </head> <body> <main class="card"> <div class="header"> <img src="assets/profile.svg" alt="大頭貼" class="avatar" width="160" height="160"> <div> <h1>你好，我是 張三（Your Name）</h1> <p class="lead">前端工程師 / JavaScript 開發者。熱衷於網頁性能優化、資料視覺化與工具開發，喜歡以函式與元件化思維拆解問題。</p> <button id="themeToggle" type="button" aria-pressed="false" style="margin-top:8px;padding:6px 10px;border:0;border-radius:6px;background:var(--accent);color:var(--accent-text);cursor:pointer">切換主題</button> </div> </div>
+  <section>
+    <h2>我做什麼（JavaScript 技術重點）</h2>
+    <ul>
+      <li>以原生 JavaScript / TypeScript 開發互動式網頁與內部工具。</li>
+      <li>建立可維護的程式架構（模組化、型別化、測試與 CI）。</li>
+      <li>資料處理與視覺化（陣列/物件操作、非同步流程、Canvas/SVG）。</li>
+      <li>前端最佳化（效能監測、Lazy Loading、Debounce/Throttle、快取策略）。</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="demos-title">
+    <h2 id="demos-title">互動示範（原生 JavaScript）</h2>
+
+    <article style="padding:12px;border-radius:8px;background:rgba(11,37,69,0.03);margin-bottom:16px">
+      <h3>1) 防抖搜尋（Debounce）</h3>
+      <p>輸入框每次鍵入都會觸發 input 事件，但透過防抖，只有停止輸入一段時間後才會模擬送出「搜尋請求」。</p>
+      <label for="searchInput">關鍵字：</label>
+      <input id="searchInput" type="search" placeholder="例如：javascript" style="padding:8px;border-radius:6px;border:1px solid rgba(11,37,69,0.15);width:100%;max-width:420px">
+      <div style="margin-top:8px;font-size:14px;color:var(--muted)">
+        鍵入次數：<span id="typedCount">0</span>，
+        已送出請求（防抖後）：<span id="requestCount">0</span>
       </div>
-      <p class="lead">我是一名前端工程師 / 軟體開發者，對網頁設計、資料視覺化與數學演算法有興趣。我喜歡把複雜的問題拆解成可重用的元件與函式。</p>
+      <div id="searchResult" style="margin-top:8px"></div>
+      <details style="margin-top:8px">
+        <summary>查看核心程式碼（debounce）</summary>
+        <pre style="overflow:auto"><code>function debounce(fn, delay = 300) {
+let timer = null
+return (...args) => {
+clearTimeout(timer)
+timer = setTimeout(() => fn.apply(null, args), delay)
+}
+}</code></pre>
+</details>
+</article>
 
-      <section>
-        <h2>聯絡</h2>
-        <p>電子郵件：<a href="mailto:your.email@example.com">your.email@example.com</a></p>
-      </section>
+    <article style="padding:12px;border-radius:8px;background:rgba(11,37,69,0.03);margin-bottom:16px">
+      <h3>2) JSON 格式化 / 壓縮工具</h3>
+      <p>使用內建 JSON.parse / JSON.stringify 完成 JSON 驗證與排版。</p>
+      <textarea id="jsonInput" rows="6" placeholder='貼上 JSON，例如：{"hello":"world","arr":[1,2,3]}' style="width:100%;padding:8px;border-radius:6px;border:1px solid rgba(11,37,69,0.15)"></textarea>
+      <div style="margin-top:8px">
+        <button id="formatBtn" type="button" style="padding:6px 10px;border:0;border-radius:6px;background:var(--accent);color:var(--accent-text);cursor:pointer;margin-right:8px">格式化</button>
+        <button id="minifyBtn" type="button" style="padding:6px 10px;border:0;border-radius:6px;background:var(--accent);color:var(--accent-text);cursor:pointer">壓縮</button>
+      </div>
+      <pre id="jsonOutput" style="margin-top:8px;white-space:pre-wrap;word-wrap:break-word;overflow:auto"></pre>
+      <div id="jsonError" role="alert" style="color:#b00020;margin-top:6px"></div>
+    </article>
 
-      <section class="links">
-        <a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="https://example.com/" target="_blank" rel="noopener noreferrer">個人網站 / 部落格</a>
-        <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">搜尋 (範例外連)</a>
-      </section>
+    <article style="padding:12px;border-radius:8px;background:rgba(11,37,69,0.03);margin-bottom:16px">
+      <h3>3) GitHub Repos 取得（fetch + async/await）</h3>
+      <p>輸入 GitHub 使用者名稱，抓取公開倉庫後依 Star 數排序，顯示前 5 個。</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <label for="ghUser" style="min-width:120px">GitHub 帳號：</label>
+        <input id="ghUser" type="text" placeholder="your-github-username" style="padding:8px;border-radius:6px;border:1px solid rgba(11,37,69,0.15);flex:1;min-width:200px">
+        <button id="loadRepos" type="button" style="padding:6px 10px;border:0;border-radius:6px;background:var(--accent);color:var(--accent-text);cursor:pointer">載入</button>
+      </div>
+      <div id="repoStatus" style="margin-top:8px;color:var(--muted)"></div>
+      <ul id="repoList" style="margin-top:8px"></ul>
+      <p style="font-size:12px;color:var(--muted)">提示：未輸入時預設會嘗試載入此頁作者的帳號。GitHub API 可能受速率限制。</p>
+    </article>
+  </section>
 
-      <footer>
-        <p>小提醒：點擊上方連結會在新分頁開啟（安全性屬性：rel="noopener noreferrer"）。</p>
-      </footer>
-    </main>
-  </body>
-</html>
+  <section>
+    <h2>聯絡</h2>
+    <p>電子郵件：<a href="mailto:">Mail</a></p>
+  </section>
+
+  <section class="links">
+    <a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="https://example.com/" target="_blank" rel="noopener noreferrer">個人網站 / 部落格</a>
+    <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">搜尋 (範例外連)</a>
+  </section>
+
+  <footer>
+    <p>本頁面包含多個以原生 JavaScript 製作的互動範例，作為申請 js.org 網域之技術展示。點擊上方連結會在新分頁開啟（rel="noopener noreferrer"）。</p>
+  </footer>
+</main>
+
+<noscript>
+  本頁包含 JavaScript 互動示範；請啟用 JavaScript 以獲得完整體驗。
+</noscript>
+
+<script>
+  // 主題切換（透過 CSS 變數，保存至 localStorage）
+  (function () {
+    const original = {
+      '--bg': '#f7f9fb',
+      '--card-bg': '#fff',
+      '--text': '#0b2545',
+      '--muted': '#6b7a8a',
+      '--accent': '#eef6ff',
+      '--accent-text': '#0b4d91'
+    };
+    const dark = {
+      '--bg': '#0b2545',
+      '--card-bg': '#102a43',
+      '--text': '#f0f4f8',
+      '--muted': '#9fb3c8',
+      '--accent': '#243b53',
+      '--accent-text': '#d9e2ec'
+    };
+    const root = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+
+    function apply(vars) {
+      Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
+    }
+    function setTheme(mode) {
+      if (mode === 'dark') {
+        apply(dark);
+        btn.setAttribute('aria-pressed', 'true');
+        btn.textContent = '切換主題（深色中）';
+      } else {
+        apply(original);
+        btn.setAttribute('aria-pressed', 'false');
+        btn.textContent = '切換主題（淺色中）';
+      }
+      localStorage.setItem('theme', mode);
+    }
+    const saved =
+      localStorage.getItem('theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    setTheme(saved);
+    btn.addEventListener('click', () =>
+      setTheme(btn.getAttribute('aria-pressed') === 'true' ? 'light' : 'dark')
+    );
+  })();
+
+  // Debounce 工具函式（安全 DOM 更新版本）
+  function debounce(fn, delay = 500) {
+    let timer = null;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(null, args), delay);
+    };
+  }
+
+  // Debounce 示範：防抖搜尋
+  (function () {
+    const input = document.getElementById('searchInput');
+    const typedCountEl = document.getElementById('typedCount');
+    const requestCountEl = document.getElementById('requestCount');
+    const resultEl = document.getElementById('searchResult');
+    let typedCount = 0;
+    let requestCount = 0;
+
+    function fakeSearch(q) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const items = [q, q + ' 教學', q + ' 範例'].filter(Boolean);
+          resolve(items);
+        }, 200);
+      });
+    }
+
+    const debounced = debounce(async (q) => {
+      const query = (q || '').trim();
+      if (!query) {
+        resultEl.innerHTML = '';
+        return;
+      }
+      requestCount++;
+      requestCountEl.textContent = String(requestCount);
+
+      const listData = await fakeSearch(query);
+      // 安全地建立 DOM
+      const ul = document.createElement('ul');
+      listData.forEach((text) => {
+        const li = document.createElement('li');
+        li.textContent = text;
+        ul.appendChild(li);
+      });
+      resultEl.innerHTML = '';
+      resultEl.appendChild(ul);
+    }, 600);
+
+    input.addEventListener('input', (e) => {
+      typedCount++;
+      typedCountEl.textContent = String(typedCount);
+      debounced(e.target.value);
+    });
+  })();
+
+  // JSON 格式化 / 壓縮
+  (function () {
+    const input = document.getElementById('jsonInput');
+    const out = document.getElementById('jsonOutput');
+    const err = document.getElementById('jsonError');
+    const formatBtn = document.getElementById('formatBtn');
+    const minifyBtn = document.getElementById('minifyBtn');
+
+    function clearMsg() {
+      err.textContent = '';
+    }
+
+    function parseJSON() {
+      try {
+        clearMsg();
+        return JSON.parse(input.value);
+      } catch (e) {
+        err.textContent = 'JSON 解析錯誤：' + e.message;
+        return null;
+      }
+    }
+
+    formatBtn.addEventListener('click', () => {
+      const obj = parseJSON();
+      if (!obj) return;
+      out.textContent = JSON.stringify(obj, null, 2);
+    });
+
+    minifyBtn.addEventListener('click', () => {
+      const obj = parseJSON();
+      if (!obj) return;
+      out.textContent = JSON.stringify(obj);
+    });
+  })();
+
+  // GitHub Repos 取得（安全渲染避免 XSS）
+  (function () {
+    const input = document.getElementById('ghUser');
+    const btn = document.getElementById('loadRepos');
+    const list = document.getElementById('repoList');
+    const status = document.getElementById('repoStatus');
+
+    const DEFAULT_USER = 'your-github-username'; // TODO: 改成你的 GitHub 帳號
+
+    async function fetchRepos(user) {
+      status.textContent = '載入中…';
+      list.innerHTML = '';
+      try {
+        const res = await fetch(
+          `https://api.github.com/users/${encodeURIComponent(user)}/repos?per_page=100`
+        );
+        if (!res.ok) throw new Error('GitHub API 回應錯誤：' + res.status);
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error('資料格式不正確');
+
+        const top = data
+          .sort((a, b) => b.stargazers_count - a.stargazers_count)
+          .slice(0, 5);
+
+        if (top.length === 0) {
+          status.textContent = '沒有找到公開倉庫。';
+          return;
+        }
+
+        const frag = document.createDocumentFragment();
+        top.forEach((r) => {
+          const li = document.createElement('li');
+
+          const a = document.createElement('a');
+          a.href = r.html_url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = r.name;
+
+          const stars = document.createElement('span');
+          stars.textContent = ` — ⭐ ${r.stargazers_count} `;
+
+          li.appendChild(a);
+          li.appendChild(stars);
+          if (r.description) {
+            const desc = document.createElement('span');
+            desc.textContent = r.description;
+            li.appendChild(desc);
+          }
+
+          frag.appendChild(li);
+        });
+
+        list.innerHTML = '';
+        list.appendChild(frag);
+        status.textContent = `顯示 ${top.length} 個熱門倉庫`;
+      } catch (e) {
+        status.textContent =
+          '載入失敗：' + e.message + '（可能是速率限制或使用者不存在）';
+      }
+    }
+
+    btn.addEventListener('click', () => {
+      const user = input.value.trim() || DEFAULT_USER;
+      fetchRepos(user);
+    });
+
+    // 頁面載入時先嘗試載入預設帳號
+    window.addEventListener('DOMContentLoaded', () => {
+      if (DEFAULT_USER && DEFAULT_USER !== 'your-github-username') {
+        fetchRepos(DEFAULT_USER);
+      }
+    });
+  })();
+</script>
+</body> </html>
